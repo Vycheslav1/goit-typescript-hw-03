@@ -1,56 +1,46 @@
-class Key{
-    private signature=Math.random();
-    getSignature(){
-        return this.signature;
-    };
+class Key {
+  private signature = Math.random();
+  getSignature() {
+    return this.signature;
+  }
 }
-class Person{
-    
-    constructor(private key:number){
-       this.key=key;
-    }
-    getKey(){
-        return this.key;
-    }
+class Person {
+  constructor(private key: Key) {}
+  getKey() {
+    return this.key;
+  }
 }
 
-abstract class House
-{
-public tenants:string[]=[];
-public door=true;
-private key=new Key().getSignature();
+abstract class House {
+  public tenants: Person[] = [];
+  public door = false;
 
-constructor(key:number){
-    this.key=key;
+  constructor(private key: Key) {}
+
+  comeIn(person: Person) {
+    if (this.door) {
+      this.tenants.push(person);
+    }
+  }
+  openDoor(key: Key) {
+    if (key.getSignature() === this.key.getSignature()) {
+      this.door = true;
+      console.log("door is open");
+    }
+  }
 }
-comeIn(person:object){
-   if(this.door){
- tenants:[...this.tenants,person];
-   } 
-}
-OpenDoor(key:number){
-     if(key===this.key){
-    console.log("door is open");
-   }
-}
-}
-class MyHouse extends House{
-   constructor(key:number){
+class MyHouse extends House {
+  constructor(key: Key) {
     super(key);
-    this.OpenDoor(key);
-    }
-  
-   
+  }
 }
-
 
 const key = new Key();
 
-const person = new Person(key.getSignature());
+const person = new Person(key);
 
-const house = new MyHouse(person.getKey());
-
+const house = new MyHouse(key);
+house.openDoor(person.getKey());
 house.comeIn(person);
-
 
 export {};
